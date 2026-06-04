@@ -3,19 +3,19 @@ import { useState } from "react";
 import Link from "next/link";
 
 const QUESTIONS = [
-  { id: "tenure",  label: "Q1. 事業歴はどのくらいですか？",                 options: ["創業1年未満","1〜3年","3〜5年","5年以上"],                                                       hoursMap: null as number[]|null, rateMap: null as number[]|null },
-  { id: "revenue", label: "Q2. 現在の年商規模は？",                          options: ["〜1,000万円","1,000〜3,000万円","3,000〜5,000万円","5,000万円以上"],                              hoursMap: null, rateMap: null },
-  { id: "hours",   label: "Q3. 週に何時間、事務作業に使っていますか？",      options: ["5時間未満","5〜10時間","10〜15時間","15時間以上"],                                                 hoursMap: [3,7.5,12.5,18], rateMap: null },
-  { id: "task",    label: "Q4. 最も時間を奪われている業務は？",               options: ["経理・請求書関連","メール・スケジュール管理","顧客管理・資料作成","全部大変"],                    hoursMap: null, rateMap: null },
-  { id: "rate",    label: "Q5. 自分の時給をいくらと考えていますか？",        options: ["3,000円","5,000円","10,000円","15,000円以上"],                                                     hoursMap: null, rateMap: [3000,5000,10000,15000] },
+  { label: "Q1. 事業歴はどのくらいですか？",            options: ["創業1年未満","1〜3年","3〜5年","5年以上"],                                                  hoursMap: null as number[]|null, rateMap: null as number[]|null },
+  { label: "Q2. 現在の年商規模は？",                     options: ["〜1,000万円","1,000〜3,000万円","3,000〜5,000万円","5,000万円以上"],                         hoursMap: null, rateMap: null },
+  { label: "Q3. 週に何時間、事務作業に使っていますか？", options: ["5時間未満","5〜10時間","10〜15時間","15時間以上"],                                            hoursMap: [3, 7.5, 12.5, 18], rateMap: null },
+  { label: "Q4. 最も時間を奪われている業務は？",          options: ["経理・請求書関連","メール・スケジュール管理","顧客管理・資料作成","全部大変"],               hoursMap: null, rateMap: null },
+  { label: "Q5. 自分の時給をいくらと考えていますか？",   options: ["3,000円","5,000円","10,000円","15,000円以上"],                                               hoursMap: null, rateMap: [3000, 5000, 10000, 15000] },
 ];
 
 export function DiagnosisQuiz() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
 
-  function pick(idx: number) {
-    const next = [...answers, idx];
+  function pick(i: number) {
+    const next = [...answers, i];
     setAnswers(next);
     setStep(step < QUESTIONS.length - 1 ? step + 1 : QUESTIONS.length);
   }
@@ -30,7 +30,7 @@ export function DiagnosisQuiz() {
           ))}
         </div>
         <p className="text-xs text-gray-400 mb-2">{step + 1} / {QUESTIONS.length}</p>
-        <p className="text-lg font-bold text-white mb-6">{q.label}</p>
+        <p className="text-base font-bold text-white mb-6">{q.label}</p>
         <div className="space-y-3">
           {q.options.map((opt, i) => (
             <button key={i} onClick={() => pick(i)}
@@ -43,25 +43,32 @@ export function DiagnosisQuiz() {
     );
   }
 
-  const hw = QUESTIONS[2].hoursMap![answers[2]] ?? 7.5;
+  const hw   = QUESTIONS[2].hoursMap![answers[2]] ?? 7.5;
   const rate = QUESTIONS[4].rateMap![answers[4]] ?? 5000;
-  const mh = Math.round(hw * 4.33);
-  const ml = mh * rate;
-  const yl = ml * 12;
-  const lv = yl >= 3000000
+  const mh   = Math.round(hw * 4.33);
+  const ml   = mh * rate;
+  const yl   = ml * 12;
+  const lv   = yl >= 3_000_000
     ? { txt: "今すぐ改善が必要なレベル", cls: "text-red-400" }
-    : yl >= 1200000
+    : yl >= 1_200_000
     ? { txt: "早期対応を推奨するレベル", cls: "text-yellow-400" }
     : { txt: "改善余地があるレベル",     cls: "text-green-400" };
 
   return (
     <div className="max-w-xl mx-auto">
       <div className="border border-gray-700 rounded-xl p-6 bg-gray-900">
-        <p className="text-xs text-yellow-500 font-bold mb-5 tracking-widest uppercase">Diagnosis Result</p>
+        <p className="text-xs text-yellow-500 font-bold mb-5 tracking-widest">DIAGNOSIS RESULT</p>
         <div className="space-y-4 mb-6">
-          <Row label="📊 月間時間損失"    value={`約${mh}時間`}              gold={false} />
-          <Row label="💴 月間機会損失額"  value={`約${ml.toLocaleString()}円`} gold />
-          <Row label="📅 年間機会損失額"  value={`約${yl.toLocaleString()}円`} gold large />
+          {[
+            { label: "📊 月間時間損失",   val: `約${mh}時間`,                 gold: false, big: false },
+            { label: "💴 月間機会損失額", val: `約${ml.toLocaleString()}円`,  gold: true,  big: false },
+            { label: "📅 年間機会損失額", val: `約${yl.toLocaleString()}円`,  gold: true,  big: true  },
+          ].map(r => (
+            <div key={r.label} className="flex justify-between items-center border-b border-gray-800 pb-3">
+              <span className="text-gray-400 text-sm">{r.label}</span>
+              <span className={`font-bold ${r.big ? "text-2xl" : "text-lg"} ${r.gold ? "text-yellow-400" : "text-white"}`}>{r.val}</span>
+            </div>
+          ))}
           <div className="flex justify-between items-center pt-1">
             <span className="text-gray-400 text-sm">⚠ 判定</span>
             <span className={`font-bold text-sm ${lv.cls}`}>【{lv.txt}】</span>
@@ -77,15 +84,6 @@ export function DiagnosisQuiz() {
         className="mt-4 text-xs text-gray-600 hover:text-gray-400 underline w-full text-center">
         もう一度診断する
       </button>
-    </div>
-  );
-}
-
-function Row({ label, value, gold, large }: { label: string; value: string; gold?: boolean; large?: boolean }) {
-  return (
-    <div className="flex justify-between items-center border-b border-gray-800 pb-3">
-      <span className="text-gray-400 text-sm">{label}</span>
-      <span className={`font-bold ${large ? "text-2xl" : "text-lg"} ${gold ? "text-yellow-400" : "text-white"}`}>{value}</span>
     </div>
   );
 }
