@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { LP_CONTENT } from "@/lib/lp-content";
 import { DiagnosisQuiz } from "@/components/lp/DiagnosisQuiz";
 
@@ -253,13 +254,10 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="relative">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-[#2B9BE4]/10 to-[#EBF8FF] shadow-lg flex items-center justify-center">
-                <div className="text-center text-gray-400 p-8">
-                  <div className="text-6xl mb-4">👩‍💼</div>
-                  <p className="text-xs text-gray-400">日本人スタッフ・PC作業<br />明るいオフィス（AI生成画像）</p>
-                </div>
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg px-5 py-4 border border-gray-100">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-lg">
+              <Image src="/images/staff-solution.jpg" alt="専任スタッフがPC作業中" fill className="object-cover" />
+            </div>
+            <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg px-5 py-4 border border-gray-100">
                 <div className="text-xs text-gray-500 mb-1">累計削減時間</div>
                 <div className="text-2xl font-bold text-[#1A2F5E]">12,000<span className="text-sm font-normal">h+</span></div>
               </div>
@@ -288,9 +286,9 @@ export default function HomePage() {
         const bg = i%2===0 ? "bg-white" : "bg-gray-50";
         const Visual = ()=>{
           if(pt.visual==="ui")   return <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg"><div className="w-full h-full bg-white p-4 border border-gray-100 rounded-2xl"><div className="text-xs font-bold text-[#1A2F5E] mb-3">📋 今週の担当タスク</div><div className="space-y-2">{[{l:"請求書発行 × 8件",s:"完了",bc:"bg-green-50",tc:"text-green-600"},{l:"経費精算 仕分け",s:"完了",bc:"bg-green-50",tc:"text-green-600"},{l:"月次レポート作成",s:"対応中",bc:"bg-[#EBF8FF]",tc:"text-[#2B9BE4]"},{l:"契約書ファイリング",s:"予定",bc:"bg-gray-50",tc:"text-gray-400"}].map(r=><div key={r.l} className={`flex items-center justify-between ${r.bc} rounded-lg px-3 py-2`}><span className="text-xs text-gray-700">{r.l}</span><span className={`text-xs font-bold ${r.tc}`}>{r.s}</span></div>)}</div><div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">担当：田中（専任）＋ バックアップ2名</div></div></div>;
-          if(pt.visual==="person") return <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-[#2B9BE4]/10 to-pink-50 shadow-lg flex items-center justify-center"><div className="text-center text-gray-400 p-8"><div className="text-6xl mb-4">👨‍💼</div><p className="text-xs">日本人男性・スマホでレポート確認<br />安心した表情（AI生成画像）</p></div></div>;
+          if(pt.visual==="person") return <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-lg"><Image src="/images/client-report.jpg" alt="レポートを確認するクライアント" fill className="object-cover" /></div>;
           if(pt.visual==="plan")   return <PlanMock />;
-          return <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-[#2B9BE4]/10 to-[#EBF8FF] shadow-lg flex items-center justify-center"><div className="text-center text-gray-400 p-8"><div className="text-6xl mb-4">👥</div><p className="text-xs">日本人チーム・オフィス作業<br />信頼感（AI生成画像）</p></div></div>;
+          return <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-lg"><Image src="/images/team-security.jpg" alt="チームで作業中のスタッフ" fill className="object-cover" /></div>;
         };
         return (
           <section key={pt.label} className={`py-24 px-4 ${bg}`}>
