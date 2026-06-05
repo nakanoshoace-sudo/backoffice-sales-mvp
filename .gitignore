@@ -38,3 +38,9 @@ next-env.d.ts
 
 scripts/*.log
 scripts/claude-lp-task.txt
+
+stripe-keys.txt
+
+supabase-keys.txt
+
+admin-credentials.txt

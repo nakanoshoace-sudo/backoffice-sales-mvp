@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { diagnosisFormSchema } from "@/lib/validations";
 import { calculateInitialScore } from "@/lib/scoring";
 import { notifyNewLead } from "@/lib/notifications";
+import { sendDay0Email } from "@/lib/email/send-day0";
 import { requireAuth } from "@/lib/auth";
 
 // POST: フォーム送信 → リード作成（公開）
