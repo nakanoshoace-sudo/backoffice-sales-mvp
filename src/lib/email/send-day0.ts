@@ -1,4 +1,4 @@
-import { sendEmail } from "@/lib/email/resend";
+﻿import { sendEmail } from "@/lib/email/resend";
 import { EMAIL_TEMPLATES } from "@/lib/email/templates";
 
 interface Day0EmailParams {
@@ -16,7 +16,7 @@ export async function sendDay0Email(params: Day0EmailParams): Promise<void> {
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://backoffice-sales-mvp.vercel.app";
-  const bookingUrl = `${siteUrl}/book`;
+  const bookingUrl = process.env.NEXT_PUBLIC_CALENDLY_URL ?? `${siteUrl}/book`;
   const unsubscribeUrl = `${siteUrl}/unsubscribe?lead_id=${params.lead_id}`;
 
   const body = template.body({
