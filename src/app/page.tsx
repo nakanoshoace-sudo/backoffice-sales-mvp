@@ -230,7 +230,7 @@ export default function HomePage() {
 
       {/* POINTS */}
       {POINTS.map((pt, idx) => (
-        <section key={pt.label} className={`py-16 px-4 ${idx % 2 === 0 ? "bg-white" : "bg-[#F7F8FA]"}`}>
+        <section key={pt.label} id={idx === 2 ? "pricing" : undefined} className={`py-16 px-4 ${idx % 2 === 0 ? "bg-white" : "bg-[#F7F8FA]"}`}>
           <div className="max-w-5xl mx-auto">
             <div className={`grid md:grid-cols-2 gap-8 items-center ${pt.side === "left" ? "md:flex-row-reverse" : ""}`}>
               <div className={pt.side === "left" ? "md:order-2" : ""}>
@@ -308,7 +308,7 @@ export default function HomePage() {
       </section>
 
       {/* Closing CTA */}
-      <section id="pricing" className="py-20 px-4" style={{ background: "linear-gradient(135deg, #1A2F5E 0%, #2B9BE4 100%)" }}>
+      <section id="cta" className="py-20 px-4" style={{ background: "linear-gradient(135deg, #1A2F5E 0%, #2B9BE4 100%)" }}>
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
             まず60秒、無料診断を受けてみませんか？
