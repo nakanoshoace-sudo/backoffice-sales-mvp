@@ -1,97 +1,93 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Suspense } from "react";
 import { LP_CONTENT } from "@/lib/lp-content";
 import { DiagnosisQuiz } from "@/components/lp/DiagnosisQuiz";
 
-/* ── static data ─────────────────────────────── */
 const STEPS = [
-  { n: "01", title: "業務棚卸し（完全無料）",   desc: "30分のヒアリングで現在の業務を整理。「何を任せればいいか」が明確になります。" },
-  { n: "02", title: "専任スタッフをアサイン",   desc: "業務内容に合わせた専任担当者が決定。窓口が一本化されるので管理コストもゼロ。" },
-  { n: "03", title: "最短1週間で稼働開始",       desc: "採用・研修・ツール導入は不要。すぐに本業集中できる環境が整います。" },
+  { n: "01", title: "業務の棚卸し（無料相談）", desc: "30分のヒアリングで現状の業務を整理。「これは任せられる」が明確になります。" },
+  { n: "02", title: "専任スタッフをアサイン", desc: "業務内容に合わせて担当者を選定。専門性の高いスタッフが対応します。" },
+  { n: "03", title: "最短1週間で稼働開始", desc: "ツール・ルーティン・引き継ぎは不要。すぐに本業に集中できる環境を作ります。" },
 ];
 
 const POINTS = [
   {
     label: "POINT 01", side: "right",
-    title: "業務をまるごと引き受ける「専任チーム制」",
-    desc:  "担当者がコロコロ変わる心配なし。専任スタッフ＋バックアップ体制で安定した品質を継続的に提供します。",
-    checks: ["専任担当者1名＋サポートチーム体制", "担当者変更・引き継ぎコストゼロ", "Slackでの即時相談対応"],
+    title: "業務まるごと任せる「右腕チーム」",
+    desc: "専任担当がコロコロ変わる心配なし。専任スタッフ＋バックアップの体制で安心して任せられます。",
+    checks: ["専任管理1名＋サポートチームの後ろ盾", "担当者変更・引継ぎコストゼロ", "Slackでの即時相談対応"],
     visual: "ui",
   },
   {
     label: "POINT 02", side: "left",
-    title: "週次レポートで業務をまるごと可視化",
-    desc:  "「何をやってもらっているか分からない」をゼロに。毎月10日に届く週次レポートで状況を完全把握。",
-    checks: ["週次レポートを毎週定期送付", "完了タスク・進行中・翌週予定を一覧化", "月次コスト削減レポートも提供"],
+    title: "週次レポートで業務が「見える化」",
+    desc: "週10分で状況を把握。「何をやってもらっているか分からない」を解消します。",
+    checks: ["週次レポートを毎週月曜に提供", "進行タスク・納品済み・今週予定一覧", "コスト削減レポート付き"],
     visual: "person",
   },
   {
     label: "POINT 03", side: "right",
     title: "シンプルな2プランで迷わず始められる",
-    desc:  "複雑な料金体系は一切なし。業務量に合わせてSTARTERかSTANDARDを選ぶだけ。",
-    checks: ["STARTER：月45,000円〜（月12時間・1ヶ月〜）", "STANDARD：月80,000円〜（月25時間・3ヶ月〜）", "隠れコストなし・追加費用なし"],
+    desc: "複雑な料金体系は一切なし。業務量に合わせてSTARTERかSTANDARDを選ぶだけ。",
+    checks: ["STARTER ¥45,000/月（月12h）", "STANDARD ¥80,000/月（月25h）", "最短1ヶ月から試せる"],
     visual: "plan",
   },
   {
     label: "POINT 04", side: "left",
-    title: "セキュリティ・NDA対応で安心して任せられる",
-    desc:  "業務開始前にNDAと業務委託契約を必ず締結。クラウドのアクセス権限管理も徹底します。",
-    checks: ["NDA・業務委託契約を必ず締結", "クラウドツールのアクセス権限を適切に管理", "解約後はデータ完全削除・返却対応"],
+    title: "安心のセキュリティ・情報管理体制",
+    desc: "NDA締結・データ管理を徹底。大切な情報を安全に扱います。",
+    checks: ["入社時NDA締結必須", "クラウドツールのアクセス権限管理", "月次セキュリティレポート"],
     visual: "team",
   },
 ];
 
 const FAQS = [
-  { q: "何を任せればいいかわかりません",   a: "初回に業務棚卸しをご一緒します（完全無料）。まずはご相談ください。どんな小さな業務でも整理してご提案できます。" },
-  { q: "情報漏洩・セキュリティが心配です", a: "NDA締結・クラウドセキュリティ対応・アクセス権限管理を徹底しています。解約後のデータ削除・返却にも対応しています。" },
-  { q: "すぐに解約できますか？",           a: "STARTERプランは1ヶ月〜、STANDARDプランは3ヶ月〜です。合わなければ最短でご解約いただけます。" },
-  { q: "品質が安定するか不安です",         a: "専任担当制＋週次レポートで品質を可視化。担当者変更時も引き継ぎ期間を設けてスムーズに対応します。" },
+  { q: "本当に1週間で始められますか？", a: "はい。初回ヒアリング後、業務内容に応じたスタッフをアサインし、最短5営業日で稼働開始します。" },
+  { q: "途中で解約できますか？", a: "STARTERは1ヶ月、STANDARDは3ヶ月の最低契約後、月末10営業日前にご連絡で解約可能です。" },
+  { q: "どんな業務を依頼できますか？", a: "経理・請求書処理・経費精算・総務対応・秘書業務・スケジュール管理など。詳細は無料診断でご確認ください。" },
+  { q: "セキュリティは大丈夫ですか？", a: "全スタッフとNDA締結済み。クラウドツールのアクセス権限管理・月次レポートで情報管理を徹底しています。" },
+  { q: "料金以外に費用はかかりますか？", a: "STANDARDプランのみ初期費用¥30,000（通常¥50,000）がかかります。それ以外の追加費用は発生前に必ずお見積もりをご提示します。" },
 ];
 
 const TRUSTS = [
-  { icon: "🛡️", title: "NDA・契約で情報を完全保護",     desc: "業務開始前に必ずNDAと業務委託契約を締結。解約後はデータを完全削除・返却します。" },
-  { icon: "👤", title: "専任担当制で品質を継続保証",     desc: "専任スタッフがあなたの業務を深く理解し長期的に伴走。バックアップ体制で品質を維持します。" },
-  { icon: "📊", title: "週次レポートで業務を完全可視化", desc: "毎週の完了タスク・進行状況・翌週予定をレポートで共有。いつでも状況を把握できます。" },
-  { icon: "💬", title: "初回業務棚卸しは完全無料",       desc: "「何を任せればいいかわからない」方でも大丈夫。30分のヒアリングで最適な対応範囲をご提案します。" },
+  { icon: "🔒", text: "NDA・秘密保持契約締結" },
+  { icon: "✅", text: "専任担当制（コロコロ変わらない）" },
+  { icon: "📊", text: "週次レポートで透明性確保" },
+  { icon: "🇯🇵", text: "日本人スタッフのみ対応" },
 ];
-/* ── sub-components ─────────────────────────── */
+
+const CALENDLY_URL = "https://calendly.com/nakano-shoace/30min";
+
 function DashboardMock() {
   return (
-    <div className="bg-gray-800 rounded-2xl p-3 shadow-2xl">
-      <div className="flex items-center gap-1.5 mb-2">
-        <div className="w-3 h-3 rounded-full bg-red-400" />
-        <div className="w-3 h-3 rounded-full bg-yellow-400" />
-        <div className="w-3 h-3 rounded-full bg-green-400" />
+    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden text-left">
+      <div className="bg-[#1A2F5E] px-4 py-3 flex items-center gap-2">
+        <span className="text-white text-sm font-bold">📊 バックオフィスダッシュボード</span>
       </div>
-      <div className="bg-white rounded-xl p-4 text-xs">
-        <div className="flex items-center justify-between mb-4">
-          <span className="font-bold text-[#1A2F5E] text-sm">業務ダッシュボード</span>
-          <span className="text-gray-400">2024年6月</span>
-        </div>
-        <div className="grid grid-cols-3 gap-2 mb-4">
-          {[
-            { v: "47", l: "完了タスク", bg: "bg-[#EBF8FF]", c: "text-[#2B9BE4]" },
-            { v: "12h", l: "削減時間",  bg: "bg-green-50",  c: "text-green-600" },
-            { v: "100%",l: "対応率",    bg: "bg-pink-50",   c: "text-pink-600"  },
-          ].map(r => (
-            <div key={r.l} className={`${r.bg} rounded-lg p-2 text-center`}>
-              <div className={`text-lg font-bold ${r.c}`}>{r.v}</div>
-              <div className="text-gray-500 text-xs">{r.l}</div>
-            </div>
-          ))}
-        </div>
-        <div className="space-y-2">
-          {[
-            { icon: "✓", label: "6月請求書 発行完了",  bg: "bg-gray-50",       ic: "text-green-500" },
-            { icon: "✓", label: "経費精算 仕分け完了",  bg: "bg-gray-50",       ic: "text-green-500" },
-            { icon: "⟳", label: "週次レポート 作成中…", bg: "bg-[#EBF8FF]",     ic: "text-[#2B9BE4]" },
-          ].map(r => (
-            <div key={r.label} className={`flex items-center gap-2 p-2 ${r.bg} rounded-lg`}>
-              <span className={r.ic}>{r.icon}</span>
-              <span className="text-gray-700">{r.label}</span>
-            </div>
-          ))}
-        </div>
+      <div className="p-4 grid grid-cols-3 gap-2 border-b border-gray-100">
+        {[
+          { label: "今月の処理件数", value: "47件", color: "text-[#2B9BE4]" },
+          { label: "削減時間", value: "32h", color: "text-green-500" },
+          { label: "対応ステータス", value: "完了 ✓", color: "text-[#1A2F5E]" },
+        ].map((kpi) => (
+          <div key={kpi.label} className="bg-[#EBF8FF] rounded-xl p-2 text-center">
+            <p className="text-xs text-gray-500 mb-1 leading-tight">{kpi.label}</p>
+            <p className={`text-sm font-bold ${kpi.color}`}>{kpi.value}</p>
+          </div>
+        ))}
+      </div>
+      <div className="p-4 space-y-2">
+        <p className="text-xs font-bold text-gray-500 mb-2">最近のタスク</p>
+        {[
+          { task: "請求書処理（12件）", status: "完了", color: "text-green-500" },
+          { task: "経費精算レポート", status: "提出済み", color: "text-green-500" },
+          { task: "来月スケジュール調整", status: "完了", color: "text-green-500" },
+        ].map((item) => (
+          <div key={item.task} className="flex items-center justify-between text-xs py-1 border-b border-gray-50">
+            <span className="text-gray-700">{item.task}</span>
+            <span className={`font-medium ${item.color}`}>{item.status}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -101,373 +97,247 @@ function PlanMock() {
   return (
     <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-100">
       <div className="grid grid-cols-2 divide-x divide-gray-100">
-        <div className="p-6 bg-white">
-          <div className="text-xs font-bold text-[#2B9BE4] uppercase tracking-wider mb-3">STARTER</div>
-          <div className="text-2xl font-bold text-[#1A2F5E] mb-1">¥45,000<span className="text-xs font-normal text-gray-500">/月</span></div>
-          <div className="text-xs text-gray-500 mb-4">1ヶ月〜 / 月12時間</div>
-          <ul className="space-y-2 text-xs text-gray-600">
-            {["経理・請求メイン","専任担当1名","週次レポート","チャットサポート"].map(f=>(
-              <li key={f} className="flex gap-2"><span className="text-green-500">✓</span>{f}</li>
+        <div className="p-5 bg-white">
+          <div className="text-xs font-bold text-[#2B9BE4] uppercase tracking-wider mb-2">STARTER</div>
+          <div className="text-xl font-bold text-[#1A2F5E] mb-1">¥45,000<span className="text-xs font-normal text-gray-500">/月</span></div>
+          <div className="text-xs text-gray-500 mb-3">1ヶ月〜 / 月12時間</div>
+          <ul className="space-y-1.5 text-xs text-gray-600">
+            {["経理・請求メイン", "専任担当1名", "週次レポート", "チャットサポート"].map((f) => (
+              <li key={f} className="flex gap-1.5 items-start"><span className="text-green-500 mt-0.5">✓</span>{f}</li>
             ))}
           </ul>
         </div>
-        <div className="p-6 bg-[#1A2F5E] text-white relative">
-          <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2B9BE4] text-white text-xs px-3 py-1 rounded-full font-bold whitespace-nowrap">★ 推奨</span>
-          <div className="text-xs font-bold text-[#2B9BE4] uppercase tracking-wider mb-3">STANDARD</div>
-          <div className="text-2xl font-bold text-white mb-1">¥80,000<span className="text-xs font-normal text-gray-400">/月</span></div>
-          <div className="text-xs text-gray-400 mb-4">3ヶ月〜 / 月25時間</div>
-          <ul className="space-y-2 text-xs text-gray-300">
-            {["4カテゴリ全対応","専任＋サポート体制","月次レポート提供","Slack即時相談"].map(f=>(
-              <li key={f} className="flex gap-2"><span className="text-[#2B9BE4]">✓</span>{f}</li>
+        <div className="p-5 bg-[#1A2F5E] text-white relative">
+          <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2B9BE4] text-white text-xs px-4 py-1 rounded-full font-bold whitespace-nowrap">★ 推奨</span>
+          <div className="text-xs font-bold text-[#2B9BE4] uppercase tracking-wider mb-2">STANDARD</div>
+          <div className="text-xl font-bold text-white mb-1">¥80,000<span className="text-xs font-normal text-gray-400">/月</span></div>
+          <div className="text-xs text-gray-400 mb-3">3ヶ月〜 / 月25時間</div>
+          <ul className="space-y-1.5 text-xs text-gray-300">
+            {["4カテゴリ全対応", "専任＋サポート体制", "月次レポート提供", "Slack即時相談"].map((f) => (
+              <li key={f} className="flex gap-1.5 items-start"><span className="text-[#2B9BE4] mt-0.5">✓</span>{f}</li>
             ))}
           </ul>
         </div>
       </div>
-      <div className="px-6 py-3 bg-gray-50 text-xs text-center text-gray-500 border-t border-gray-100">
+      <div className="px-5 py-2.5 bg-gray-50 text-xs text-center text-gray-500 border-t border-gray-100">
         ※ 詳細は無料相談でご説明いたします
       </div>
     </div>
   );
 }
-/* ── main page ──────────────────────────────── */
-export default function HomePage() {
-  const c = LP_CONTENT;
-  return (
-    <div className="flex flex-col min-h-screen bg-white font-sans">
 
-      {/* ── HEADER ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#2B9BE4] flex items-center justify-center text-white text-xs font-bold">BO</div>
-            <span className="text-sm font-bold text-[#1A2F5E]">{c.siteName}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="#contact" className="hidden md:inline text-sm text-[#2B9BE4] border border-[#2B9BE4] px-4 py-2 rounded-xl hover:bg-[#EBF8FF] transition-colors">
-              まずは無料相談
-            </Link>
-            <Link href="/diagnosis" className="bg-[#1A2F5E] text-white text-sm font-bold px-5 py-2.5 rounded-xl hover:bg-[#2B9BE4] transition-colors shadow">
-              ▶ 無料診断を受ける
-            </Link>
-          </div>
+export default function HomePage() {
+  return (
+    <div className="min-h-screen bg-white font-sans">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <Link href="/" className="text-base font-bold text-[#1A2F5E]">オンラインバックオフィス</Link>
+          <nav className="hidden md:flex items-center gap-6 text-sm text-gray-600">
+            <a href="#features" className="hover:text-[#2B9BE4] transition-colors">特徴</a>
+            <a href="#pricing" className="hover:text-[#2B9BE4] transition-colors">料金</a>
+            <a href="#faq" className="hover:text-[#2B9BE4] transition-colors">よくある質問</a>
+          </nav>
+          <Link href="/diagnosis" className="bg-[#2B9BE4] text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-[#1a8fd1] transition-colors">
+            無料診断を受ける
+          </Link>
         </div>
       </header>
 
-      {/* ── SEC 1: FIRST VIEW ── */}
-      <section className="relative pt-20 min-h-screen flex items-center"
-        style={{ background: "linear-gradient(135deg,#ffffff 0%,#EBF8FF 60%,#dbeeff 100%)" }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-8 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center w-full">
+      {/* FV */}
+      <section className="pt-24 pb-16 px-4 bg-gradient-to-br from-[#EBF8FF] to-white">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <span className="inline-block text-xs font-bold tracking-widest text-[#2B9BE4] uppercase mb-6 bg-[#EBF8FF] px-3 py-1 rounded-full">
-              FOR SOLO CEO &amp; SMALL TEAM
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-[#1A2F5E] leading-tight mb-6">
-              バックオフィスを、<br />
-              もう自分で<br />
-              <span className="text-[#2B9BE4]">やらなくていい。</span>
+            <span className="inline-block text-xs font-bold tracking-widest text-[#2B9BE4] uppercase mb-4">ONLINE BACK OFFICE</span>
+            <h1 className="text-3xl md:text-5xl font-bold text-[#1A2F5E] leading-tight mb-4">
+              社長の仕事を、<br />もっと本質的に。
             </h1>
-            <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-8">
-              月額45,000円〜、最短1週間で稼働。<br />
-              経理・総務・秘書業務をまるごと代行します。
+            <p className="text-sm md:text-base text-gray-600 leading-relaxed mb-8">
+              経理・請求・総務・秘書をまるごと代行。<br className="hidden md:block" />
+              1人社長・スタートアップに特化したバックオフィス支援。
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Link href="/diagnosis"
-                className="flex items-center justify-center gap-2 bg-[#1A2F5E] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#2B9BE4] transition-all shadow-lg text-sm min-h-[52px]">
-                ▶ 無料診断を受ける（60秒）
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/diagnosis" className="inline-flex items-center justify-center gap-2 bg-[#1A2F5E] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#2B9BE4] transition-colors text-sm">
+                ▶ 60秒で無料診断する
               </Link>
-              <Link href="#contact"
-                className="flex items-center justify-center gap-2 border-2 border-[#2B9BE4] text-[#2B9BE4] font-bold px-8 py-4 rounded-xl hover:bg-[#EBF8FF] transition-all text-sm min-h-[52px]">
-                まずは無料相談する
-              </Link>
-            </div>
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-              {["初回業務棚卸し無料","1ヶ月〜解約可","採用コストゼロ"].map(b=>(
-                <span key={b} className="flex items-center gap-1.5">
-                  <span className="text-green-500 font-bold">✓</span>{b}
-                </span>
-              ))}
+              <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 border-2 border-[#2B9BE4] text-[#2B9BE4] font-bold px-6 py-4 rounded-xl hover:bg-[#EBF8FF] transition-colors text-sm">
+                📅 日程を予約する
+              </a>
             </div>
           </div>
-          <div className="relative hidden md:block">
+          <div className="mt-4 md:mt-0">
             <DashboardMock />
-            <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-2 border border-gray-100">
-              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-sm">✓</div>
-              <div>
-                <div className="text-xs font-bold text-gray-800">今週の業務完了</div>
-                <div className="text-xs text-gray-500">47件すべて対応済み</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
-      {/* ── SEC 2: METRICS ── */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      {/* Metrics */}
+      <section className="py-12 px-4 bg-[#EBF8FF]">
+        <div className="max-w-4xl mx-auto grid grid-cols-3 gap-4 text-center">
           {[
-            { n:"¥45,000〜", unit:"/月", label:"月額費用", sub:"経理・総務・秘書まで\nまとめて対応" },
-            { n:"最短1週間", unit:"",    label:"稼働開始まで", sub:"業務棚卸しから\nスタート支援まで無料" },
-            { n:"¥0",        unit:"",    label:"採用・研修コスト", sub:"雇用リスクなし\n即戦力のプロが対応" },
-          ].map(m=>(
-            <div key={m.label} className="text-center p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="text-4xl font-bold text-[#1A2F5E] mb-1">
-                {m.n}<span className="text-base font-normal text-gray-500">{m.unit}</span>
-              </div>
-              <div className="text-sm text-[#2B9BE4] font-bold mb-2">{m.label}</div>
-              <div className="text-xs text-gray-500 whitespace-pre-line">{m.sub}</div>
+            { value: "150+", label: "導入企業累計" },
+            { value: "月32h", label: "平均削減時間" },
+            { value: "98%", label: "継続率" },
+          ].map((m) => (
+            <div key={m.label}>
+              <p className="text-3xl md:text-4xl font-bold text-[#1A2F5E]">{m.value}</p>
+              <p className="text-xs md:text-sm text-gray-500 mt-1">{m.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── SEC 3: PAIN POINTS ── */}
-      <section className="py-24 px-4 bg-gray-50" style={{ clipPath:"polygon(0 4%,100% 0,100% 96%,0 100%)", marginTop:"-2%", paddingTop:"6rem", paddingBottom:"6rem" }}>
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase">PAIN POINTS</span>
-            <h2 className="text-3xl font-bold text-[#1A2F5E] mt-3">こんな状況、<br className="md:hidden" />心当たりはありませんか？</h2>
-          </div>
-          <div className="bg-white rounded-2xl shadow-sm p-8 space-y-4">
+      {/* Pain Points */}
+      <section className="py-16 px-4 bg-[#1A2F5E]" style={{ clipPath: "polygon(0 4%,100% 0,100% 96%,0 100%)" }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase mb-3">PAIN POINTS</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-10">こんな状況、ありませんか？</h2>
+          <div className="grid md:grid-cols-3 gap-4">
             {[
-              "請求書・経理処理に毎月10時間以上とられている",
-              "「あの人しかわからない」業務が増えて属人化している",
-              "採用するほどではないが手が全然回らない",
-              "社長が事務を全部抱えて本業に集中できない",
-              "外注したことがあるが品質がバラバラで管理が大変だった",
-            ].map((pain,i)=>(
-              <div key={i} className="flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
-                <span className="text-[#2B9BE4] text-lg mt-0.5 flex-shrink-0">☑</span>
-                <span className="text-gray-700 text-sm">{pain}</span>
+              "請求・経費処理に毎月10時間以上かかっている",
+              "総務・人事の対応で本業に集中できない",
+              "採用コストをかけずに即戦力がほしい",
+            ].map((pain) => (
+              <div key={pain} className="bg-white/10 rounded-xl p-5 text-left">
+                <span className="text-2xl mb-3 block">😓</span>
+                <p className="text-white text-sm leading-relaxed">{pain}</p>
               </div>
             ))}
           </div>
-          <p className="text-center mt-8 text-gray-500 text-sm">
-            それ、すべて<strong className="text-[#1A2F5E]">私たちが解決します。</strong>
-          </p>
         </div>
       </section>
-      {/* ── SEC 4: SOLUTION ── */}
-      <section className="py-24 px-4" style={{ background:"linear-gradient(160deg,#EBF8FF 0%,#ffffff 60%)" }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase">SOLUTION</span>
-            <h2 className="text-3xl font-bold text-[#1A2F5E] mt-3">最短1週間で、<br className="md:hidden" />プロのバックオフィスチームが稼働</h2>
+
+      {/* Solution */}
+      <section id="features" className="py-20 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase mb-3">SOLUTION</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1A2F5E]">最短1週間で、プロのバックオフィスチームが稼動</h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="relative">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-lg">
-              <Image src="/images/staff-solution.jpg" alt="専任スタッフがPC作業中" fill className="object-cover" />
-            </div>
-            <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg px-5 py-4 border border-gray-100">
-                <div className="text-xs text-gray-500 mb-1">累計削減時間</div>
-                <div className="text-2xl font-bold text-[#1A2F5E]">12,000<span className="text-sm font-normal">h+</span></div>
-              </div>
-            </div>
-            <div className="space-y-8">
-              {STEPS.map((s,i)=>(
-                <div key={s.n} className="flex gap-5 items-start">
-                  <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm text-white ${i===2?"bg-[#2B9BE4]":"bg-[#1A2F5E]"}`}>{s.n}</div>
-                  <div>
-                    <h3 className="font-bold text-[#1A2F5E] text-lg mb-1">{s.title}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{s.desc}</p>
-                  </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {STEPS.map((step) => (
+              <div key={step.n} className="text-center p-6 rounded-2xl bg-[#F7F8FA]">
+                <div className="w-12 h-12 rounded-full bg-[#2B9BE4] text-white font-bold flex items-center justify-center mx-auto mb-4 text-sm">
+                  {step.n}
                 </div>
-              ))}
-              <Link href="/diagnosis"
-                className="inline-flex items-center gap-2 bg-[#1A2F5E] text-white font-bold px-8 py-4 rounded-xl hover:bg-[#2B9BE4] transition-all shadow-lg text-sm">
-                ▶ 無料診断で業務棚卸しを始める
-              </Link>
-            </div>
+                <h3 className="font-bold text-[#1A2F5E] mb-2 text-sm">{step.title}</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">{step.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
-      {/* ── SEC 5: POINTS 01-04 ── */}
-      {POINTS.map((pt,i)=>{
-        const isLeft = pt.side === "right"; // テキストが左 = 画像が右
-        const bg = i%2===0 ? "bg-white" : "bg-gray-50";
-        const Visual = ()=>{
-          if(pt.visual==="ui")   return <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-lg"><div className="w-full h-full bg-white p-4 border border-gray-100 rounded-2xl"><div className="text-xs font-bold text-[#1A2F5E] mb-3">📋 今週の担当タスク</div><div className="space-y-2">{[{l:"請求書発行 × 8件",s:"完了",bc:"bg-green-50",tc:"text-green-600"},{l:"経費精算 仕分け",s:"完了",bc:"bg-green-50",tc:"text-green-600"},{l:"月次レポート作成",s:"対応中",bc:"bg-[#EBF8FF]",tc:"text-[#2B9BE4]"},{l:"契約書ファイリング",s:"予定",bc:"bg-gray-50",tc:"text-gray-400"}].map(r=><div key={r.l} className={`flex items-center justify-between ${r.bc} rounded-lg px-3 py-2`}><span className="text-xs text-gray-700">{r.l}</span><span className={`text-xs font-bold ${r.tc}`}>{r.s}</span></div>)}</div><div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">担当：田中（専任）＋ バックアップ2名</div></div></div>;
-          if(pt.visual==="person") return <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-lg"><Image src="/images/client-report.jpg" alt="レポートを確認するクライアント" fill className="object-cover" /></div>;
-          if(pt.visual==="plan")   return <PlanMock />;
-          return <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-lg"><Image src="/images/team-security.jpg" alt="チームで作業中のスタッフ" fill className="object-cover" /></div>;
-        };
-        return (
-          <section key={pt.label} className={`py-24 px-4 ${bg}`}>
-            <div className={`max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center ${!isLeft?"md:flex md:flex-row-reverse":""}`}>
-              <div>
-                <span className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase">{pt.label}</span>
-                <h2 className="text-2xl md:text-3xl font-bold text-[#1A2F5E] mt-2 mb-4">{pt.title}</h2>
-                <p className="text-gray-600 leading-relaxed mb-6 text-sm">{pt.desc}</p>
-                <ul className="space-y-3">
-                  {pt.checks.map(ch=>(
-                    <li key={ch} className="flex items-center gap-3 text-sm text-gray-700">
-                      <span className="text-green-500 font-bold flex-shrink-0">✓</span>{ch}
+
+      {/* POINTS */}
+      {POINTS.map((pt, idx) => (
+        <section key={pt.label} className={`py-16 px-4 ${idx % 2 === 0 ? "bg-white" : "bg-[#F7F8FA]"}`}>
+          <div className="max-w-5xl mx-auto">
+            <div className={`grid md:grid-cols-2 gap-8 items-center ${pt.side === "left" ? "md:flex-row-reverse" : ""}`}>
+              <div className={pt.side === "left" ? "md:order-2" : ""}>
+                <p className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase mb-2">{pt.label}</p>
+                <h2 className="text-xl md:text-2xl font-bold text-[#1A2F5E] mb-4">{pt.title}</h2>
+                <p className="text-sm text-gray-600 leading-relaxed mb-6">{pt.desc}</p>
+                <ul className="space-y-2">
+                  {pt.checks.map((c) => (
+                    <li key={c} className="flex gap-2 items-start text-sm text-gray-700">
+                      <span className="text-[#2B9BE4] mt-0.5 shrink-0">✓</span>{c}
                     </li>
                   ))}
                 </ul>
               </div>
-              <Visual />
-            </div>
-          </section>
-        );
-      })}
-      {/* ── SEC 6: BENEFIT ── */}
-      <section className="py-24 px-4 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase">BENEFIT</span>
-            <h2 className="text-3xl font-bold text-[#1A2F5E] mt-3">導入後、こう変わります</h2>
-            <p className="text-gray-500 text-sm mt-3">実際の導入事例をもとにした Before / After</p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border-2 border-red-100 bg-red-50 p-8">
-              <div className="inline-block text-xs font-bold text-red-500 bg-red-100 px-3 py-1 rounded-full mb-6 uppercase tracking-wider">Before</div>
-              <ul className="space-y-4">
-                {[
-                  {t:"月58時間を事務作業に消費",     s:"請求書・経費精算・メール対応で午前が消える"},
-                  {t:"収支が把握できていない",         s:"月次収支が月末まで不明・資金繰りに不安"},
-                  {t:"担当者が辞めたら業務が止まる",   s:"属人化・ブラックボックス化が深刻"},
-                  {t:"本業に集中できない",             s:"社長が事務処理をしている時間は売上ゼロ"},
-                ].map(b=>(
-                  <li key={b.t} className="flex items-start gap-3">
-                    <span className="text-red-400 mt-0.5 flex-shrink-0 text-lg">✗</span>
-                    <div>
-                      <div className="font-bold text-gray-800 text-sm">{b.t}</div>
-                      <div className="text-xs text-gray-500 mt-0.5">{b.s}</div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-2xl border-2 border-green-100 bg-green-50 p-8">
-              <div className="inline-block text-xs font-bold text-green-600 bg-green-100 px-3 py-1 rounded-full mb-6 uppercase tracking-wider">After（導入2ヶ月後）</div>
-              <ul className="space-y-4">
-                {[
-                  {t:"月12時間まで削減（▲46時間）",    s:"取り戻した時間を提案・営業活動に全振り"},
-                  {t:"毎月10日に月次レポートが届く",     s:"収支・タスク完了数・翌月予定を一覧で把握"},
-                  {t:"専任チームで引き継ぎコストゼロ",   s:"担当変更があっても業務継続性を完全保証"},
-                  {t:"売上が3ヶ月で1.3倍に",           s:"本業集中により新規受注が加速"},
-                ].map(a=>(
-                  <li key={a.t} className="flex items-start gap-3">
-                    <span className="text-green-500 mt-0.5 flex-shrink-0 text-lg">✓</span>
-                    <div>
-                      <div className="font-bold text-gray-800 text-sm">{a.t}</div>
-                      <div className="text-xs text-gray-500 mt-0.5">{a.s}</div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <div className={pt.side === "left" ? "md:order-1" : ""}>
+                {pt.visual === "ui" && <DashboardMock />}
+                {pt.visual === "plan" && <PlanMock />}
+                {pt.visual === "person" && (
+                  <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-lg">
+                    <Image src="/images/client-report.jpg" alt="週次レポート確認" fill className="object-cover" />
+                  </div>
+                )}
+                {pt.visual === "team" && (
+                  <div className="aspect-[4/3] rounded-2xl overflow-hidden relative shadow-lg">
+                    <Image src="/images/team-security.jpg" alt="チームでの情報管理" fill className="object-cover" />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-          <div className="mt-10 bg-[#1A2F5E] rounded-2xl p-8 text-white text-center">
-            <div className="text-xs text-[#2B9BE4] mb-2 font-bold uppercase tracking-widest">ROI SIMULATION</div>
-            <div className="text-2xl md:text-3xl font-bold mb-2">
-              月8万円の投資 → <span className="text-[#2B9BE4]">月25万円の価値創出</span>
+        </section>
+      ))}
+
+      {/* Trust */}
+      <section className="py-16 px-4 bg-[#F7F8FA]">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase mb-3">TRUST</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1A2F5E]">安心してお任せいただける理由</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+            {TRUSTS.map((t) => (
+              <div key={t.text} className="bg-white rounded-2xl p-5 text-center shadow-sm">
+                <span className="text-3xl block mb-3">{t.icon}</span>
+                <p className="text-xs font-medium text-gray-700 leading-snug">{t.text}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* FAQ */}
+          <div id="faq">
+            <h2 className="text-xl md:text-2xl font-bold text-[#1A2F5E] text-center mb-8">よくある質問</h2>
+            <div className="space-y-3">
+              {FAQS.map((faq) => (
+                <details key={faq.q} className="bg-white rounded-xl p-5 shadow-sm group">
+                  <summary className="font-medium text-[#1A2F5E] cursor-pointer text-sm list-none flex justify-between items-center">
+                    {faq.q}
+                    <span className="text-[#2B9BE4] ml-2 shrink-0">▼</span>
+                  </summary>
+                  <p className="mt-3 text-sm text-gray-600 leading-relaxed">{faq.a}</p>
+                </details>
+              ))}
             </div>
-            <div className="text-gray-400 text-sm">50時間削減 × 時給5,000円換算 ＝ 250,000円 ／ 純利益：170,000円/月</div>
           </div>
         </div>
       </section>
 
-      {/* ── 中間CTA帯 ── */}
-      <section className="py-16 px-4" style={{ background:"linear-gradient(135deg,#1A2F5E 0%,#2B9BE4 100%)" }}>
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-white/80 text-sm mb-3">今月残り <strong className="text-white">2枠</strong> ／ 受付中</p>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">まず60秒、無料診断だけでも<br className="md:hidden" />やってみませんか？</h2>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/diagnosis" className="bg-white text-[#1A2F5E] font-bold px-8 py-4 rounded-xl hover:bg-[#EBF8FF] transition-all shadow-lg text-sm min-h-[52px] flex items-center justify-center">
-              ▶ 無料診断を受ける（60秒）
-            </Link>
-            <Link href="#contact" className="border-2 border-white text-white font-bold px-8 py-4 rounded-xl hover:bg-white/10 transition-all text-sm min-h-[52px] flex items-center justify-center">
-              まずは無料相談する
-            </Link>
-          </div>
-          <p className="text-white/50 text-xs mt-5">しつこい営業・勧誘は一切ありません</p>
-        </div>
-      </section>
-      {/* ── SEC 7: TRUST ── */}
-      <section className="py-24 px-4 bg-[#EBF8FF]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase">TRUST &amp; SAFETY</span>
-            <h2 className="text-3xl font-bold text-[#1A2F5E] mt-3">安心して任せられる<br />4つの理由</h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6 mb-16">
-            {TRUSTS.map(tr=>(
-              <div key={tr.title} className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-[#2B9BE4]/10 flex items-center justify-center text-2xl mb-5">{tr.icon}</div>
-                <h3 className="font-bold text-[#1A2F5E] text-lg mb-2">{tr.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{tr.desc}</p>
-              </div>
-            ))}
-          </div>
-          <h3 className="text-xl font-bold text-[#1A2F5E] text-center mb-8">よくある質問</h3>
-          <div className="space-y-4 max-w-3xl mx-auto">
-            {FAQS.map(faq=>(
-              <div key={faq.q} className="bg-white rounded-2xl p-6 shadow-sm">
-                <div className="font-bold text-[#1A2F5E] text-sm mb-2">Q. {faq.q}</div>
-                <div className="text-gray-600 text-sm leading-relaxed">A. {faq.a}</div>
-              </div>
-            ))}
-          </div>
+      {/* Diagnosis Quiz */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-2xl mx-auto">
+          <Suspense fallback={<div className="text-center text-gray-500">読み込み中...</div>}>
+            <DiagnosisQuiz />
+          </Suspense>
         </div>
       </section>
 
-      {/* ── SEC 8: CLOSING CTA ── */}
-      <section id="contact" className="py-24 px-4 bg-[#1A2F5E]">
+      {/* Closing CTA */}
+      <section id="pricing" className="py-20 px-4" style={{ background: "linear-gradient(135deg, #1A2F5E 0%, #2B9BE4 100%)" }}>
         <div className="max-w-2xl mx-auto text-center">
-          <span className="text-xs font-bold tracking-widest text-[#2B9BE4] uppercase">GET STARTED</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mt-4 mb-4 leading-tight">
-            {c.finalCtaTitle1}<br />{c.finalCtaTitle2}
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+            まず60秒、無料診断を受けてみませんか？
           </h2>
-          <p className="text-gray-400 text-sm mb-4">{c.finalCtaNote}</p>
-          <ul className="inline-block text-left space-y-2 mb-10">
-            {c.finalCtaPoints.map(pt=>(
-              <li key={pt} className="flex items-center gap-3 text-gray-300 text-sm">
-                <span className="text-[#2B9BE4] font-bold flex-shrink-0">✓</span>{pt}
-              </li>
-            ))}
-          </ul>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link href="/diagnosis"
-              className="flex items-center justify-center gap-2 bg-[#2B9BE4] text-white font-bold px-10 py-5 rounded-xl hover:bg-[#1a8fd1] transition-all shadow-xl text-base min-h-[56px]">
+          <p className="text-sm text-blue-100 mb-8 leading-relaxed">
+            個人情報は不要。あなたのバックオフィスの課題を今すぐ確認できます。
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/diagnosis" className="inline-flex items-center justify-center gap-2 bg-white text-[#1A2F5E] font-bold px-8 py-4 rounded-xl hover:bg-[#EBF8FF] transition-colors text-sm">
               ▶ 無料診断を受ける（60秒）
             </Link>
-            <a href={`mailto:${c.contactEmail}`}
-              className="flex items-center justify-center gap-2 border-2 border-white/40 text-white font-bold px-10 py-5 rounded-xl hover:border-white hover:bg-white/10 transition-all text-base min-h-[56px]">
-              まずは無料相談する
+            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded-xl hover:bg-white/10 transition-colors text-sm">
+              📅 日程を予約する
             </a>
           </div>
-          <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-500">
-            {["完全無料・費用なし","しつこい営業・勧誘なし","24時間以内にご返信","今月残り2枠"].map(b=>(
-              <span key={b} className="flex items-center gap-1.5">
-                <span className="text-[#2B9BE4]">✓</span>{b}
-              </span>
-            ))}
-          </div>
-          <div className="mt-10 pt-8 border-t border-white/10 text-xs text-gray-600">
-            <p>Contact: <a href={`mailto:${c.contactEmail}`} className="text-gray-400 hover:text-gray-300 transition-colors">{c.contactEmail}</a></p>
-            <p className="mt-1">※ 24時間以内にご連絡いたします</p>
-          </div>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="py-10 px-4 bg-black border-t border-gray-900">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#2B9BE4] flex items-center justify-center text-white text-xs font-bold">BO</div>
-            <span className="text-sm font-bold text-gray-300">{c.siteName}</span>
+      {/* Footer */}
+      <footer className="py-8 px-4 bg-[#1A2F5E]">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+          <p>© 2026 オンラインバックオフィス代行 | SHOACE</p>
+          <div className="flex gap-6 text-xs">
+            <Link href="/legal/tokushoho" className="hover:text-white transition-colors">特定商取引法</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">プライバシーポリシー</Link>
+            <a href="mailto:nakano.shoace@gmail.com" className="hover:text-white transition-colors">お問い合わせ</a>
           </div>
-          <nav className="flex flex-wrap justify-center gap-6 text-xs text-gray-600">
-            <Link href="/privacy" className="hover:text-gray-400 transition-colors">プライバシーポリシー</Link>
-            <Link href="/legal/tokushoho" className="hover:text-gray-400 transition-colors">特定商取引法に基づく表記</Link>
-            <Link href="/diagnosis" className="hover:text-gray-400 transition-colors">無料診断</Link>
-            <a href={`mailto:${c.contactEmail}`} className="hover:text-gray-400 transition-colors">お問い合わせ</a>
-          </nav>
-          <p className="text-xs text-gray-700">© 2024 {c.siteName}</p>
         </div>
       </footer>
-
     </div>
   );
 }
