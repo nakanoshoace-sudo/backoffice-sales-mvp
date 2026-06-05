@@ -123,7 +123,7 @@ export function DiagnosisQuiz() {
         </div>
         <Link href="/diagnosis?source=lp_quiz"
           className="block w-full text-center bg-[#1A2F5E] text-white px-6 py-4 rounded-xl font-bold text-sm hover:bg-[#2B9BE4] transition-colors">
-          オンラインで棚卸を依頼する（30分）
+          無料診断を受ける
         </Link>
         <p className="text-center text-xs text-gray-400 mt-3">完全無料・営業なし・24時間以内に返信</p>
       </div>

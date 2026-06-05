@@ -6,7 +6,6 @@ const CALENDLY_URL = "https://calendly.com/nakano-shoace/30min";
 
 export default function ThanksPage() {
   useEffect(() => {
-    // 送信完了後、3秒後にCalendlyへ自動遷移
     const timer = setTimeout(() => {
       window.location.href = CALENDLY_URL;
     }, 3000);
@@ -35,7 +34,7 @@ export default function ThanksPage() {
           href={CALENDLY_URL}
           className="block w-full bg-[#1A2F5E] text-white py-4 px-6 rounded-xl font-bold hover:bg-[#2B9BE4] transition-colors mb-4 text-sm"
         >
-          📅 今すぐ日程を調整する（30分）
+          今すぐ日程を調整する（30分）
         </a>
 
         <Link

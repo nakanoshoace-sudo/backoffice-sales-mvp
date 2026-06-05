@@ -158,11 +158,8 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/diagnosis" className="inline-flex items-center justify-center gap-2 bg-[#1A2F5E] text-white font-bold px-6 py-4 rounded-xl hover:bg-[#2B9BE4] transition-colors text-sm">
-                ▶ 60秒で無料診断する
+                無料診断を受ける
               </Link>
-              <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 border-2 border-[#2B9BE4] text-[#2B9BE4] font-bold px-6 py-4 rounded-xl hover:bg-[#EBF8FF] transition-colors text-sm">
-                📅 日程を予約する
-              </a>
             </div>
           </div>
           <div className="mt-4 md:mt-0">
@@ -317,7 +314,7 @@ export default function HomePage() {
             個人情報は不要。あなたのバックオフィスの課題を今すぐ確認できます。
           </p>
           <Link href="/diagnosis" className="inline-flex items-center justify-center gap-2 bg-white text-[#1A2F5E] font-bold px-8 py-4 rounded-xl hover:bg-[#EBF8FF] transition-colors text-sm">
-            オンラインで棚卸を依頼する（30分）
+            無料診断を受ける
           </Link>
         </div>
       </section>
