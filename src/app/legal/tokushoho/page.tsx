@@ -1,25 +1,19 @@
 import Link from "next/link";
 
-/**
- * 特定商取引法に基づく表記
- *
- * 事業者情報を変更するには、下記 LEGAL_INFO の値を書き換えてください。
- * 外部ファイル（env や DB）から読む場合はここを Server Component のまま fetch に差し替え可能です。
- */
 const LEGAL_INFO = {
-  seller: "株式会社〇〇〇〇",          // TODO: 正式名称に差し替え
-  representative: "〇〇 〇〇",         // TODO: 代表者名
-  address: "〒000-0000 東京都〇〇区〇〇 0-0-0", // TODO: 所在地
-  phone: "お問い合わせはメールにてお願いいたします", // TODO: 電話番号
-  email: "info@example.com",            // TODO: 連絡先メール
-  serviceName: "オンラインバックオフィス代行",
+  seller: "SHOACE",
+  representative: "中野 翔太",
+  address: "〒104-0061 東京都中央区銀座8-10-5 DENSANビル G-62007",
+  phone: "お問い合わせはメールにてお願い致します。※必要であれば開示可能",
+  email: "nakano.shoace@gmail.com",
+  serviceName: "オンラインバックオフィス",
   pricing: [
-    "ライトプラン: 月額 80,000円（税別）",
-    "スタンダードプラン: 月額 150,000円（税別）",
-    "プレミアムプラン: 月額 300,000円（税別）",
+    "スタータープラン: 月額 45,000円（税別）",
+    "スタンダードプラン: 月額 80,000円（税別）",
+    "※別途初期費用あり",
   ],
-  paymentMethods: "銀行振込、クレジットカード",
-  paymentTiming: "月額制：毎月末日までにお支払い（翌月分前払い）",
+  paymentMethods: "Stripe決済",
+  paymentTiming: "月額制（翌月分前払い）",
   deliveryTiming: "契約締結後、準備期間（通常5営業日以内）を経てサービス開始",
   cancellation: [
     "最低契約期間: 1ヶ月",
@@ -28,7 +22,7 @@ const LEGAL_INFO = {
     "初月無条件返金保証あり",
   ],
   additionalCost: "基本料金以外に費用が発生する場合は、事前にお見積もりをご提示いたします",
-  lastUpdated: "2024年1月1日",
+  lastUpdated: "2026年6月5日",
 };
 
 export default function TokushohoPage() {
@@ -100,7 +94,7 @@ export default function TokushohoPage() {
 
       <footer className="py-8 px-4 border-t">
         <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <p>© 2024 オンラインバックオフィス代行</p>
+          <p>© 2026 オンラインバックオフィス代行</p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-gray-700 transition-colors">
               プライバシーポリシー
